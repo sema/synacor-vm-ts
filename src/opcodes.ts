@@ -57,6 +57,10 @@ export let opcodes: Opcode[] = [
         // jump to <a>
         mnemonic: "jmp",
         size: 2,
+        impl: (r: Runtime, tokens: number[]) => {
+            const a = resolveArg(r, tokens, 0)
+            r.pc = a
+        }
     },
     { 
         // opcode 7

@@ -63,6 +63,19 @@ describe('testing interpreter output', () => {
 
     expect(world.runtime.registers[reg7idx]).toBe(10)
   });
+  test('opJmp jumps to target program counter', () => {
+    let world = new World()
+    const tokens = [
+        opJmp, 6,        // 0: goto 2
+        opSet, reg0, 10, // 2: reg0 = 10
+        opHalt,          // 5: halt 
+        opSet, reg0, 20, // 6: reg0 = 20
+        opHalt,          // 9: halt
+    ]
+    interpret(world.runtime, tokens)
+
+    expect(world.runtime.registers[reg0idx]).toBe(20)
+  });
   test('opOut flushes literals when newline is encountered', () => {
     let world = new World()
     const tokens = [
