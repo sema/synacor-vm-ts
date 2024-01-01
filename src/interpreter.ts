@@ -2,9 +2,9 @@ import { opcodes } from './opcodes'
 import { Runtime } from './runtime'
 import { formatInstruction } from './prettyprinter'
 
-export function interpret(runtime: Runtime, tokens: number[], trace?: boolean) {
+export function interpret(runtime: Runtime, trace?: boolean) {
     while (runtime.running) {
-        const opcodeIndex = tokens[runtime.pc]
+        const opcodeIndex = runtime.memory[runtime.pc]
         if (opcodeIndex == undefined) {
             throw new Error(`pc is out of bounds, missing halt operation?`)
         }
@@ -18,9 +18,9 @@ export function interpret(runtime: Runtime, tokens: number[], trace?: boolean) {
         }
 
         if (trace) {
-            console.log(formatInstruction(runtime.pc, tokens, runtime))
+            console.log(formatInstruction(runtime.pc, runtime.memory, runtime))
         }
 
-        opcode.impl(runtime, tokens)
+        opcode.impl(runtime)
     }
 }

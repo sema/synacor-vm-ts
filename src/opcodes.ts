@@ -5,7 +5,7 @@ export const registerOffset = 32768
 export class Opcode {
     mnemonic!: string;
     size!: number;
-    impl?: (r: Runtime, tokens: number[]) => void;
+    impl?: (r: Runtime) => void;
 }
 
 export let opcodes: Opcode[] = [
@@ -14,7 +14,7 @@ export let opcodes: Opcode[] = [
         // stop execution and terminate the program
         mnemonic: "halt",
         size: 1,
-        impl: (r: Runtime, tokens: number[]) => {
+        impl: (r: Runtime) => {
             r.running = false
         }
     },
@@ -23,9 +23,9 @@ export let opcodes: Opcode[] = [
         // set register <a> to the value of <b>
         mnemonic: "set",
         size: 3,
-        impl: (r: Runtime, tokens: number[]) => {
-            let aIdx = resolveRegisterIdx(r, tokens, 0)
-            let b = resolveArg(r, tokens, 1)
+        impl: (r: Runtime) => {
+            let aIdx = resolveRegisterIdx(r, 0)
+            let b = resolveArg(r, 1)
             r.registers[aIdx] = b
             r.pc = r.pc + 3
         }
@@ -35,8 +35,8 @@ export let opcodes: Opcode[] = [
         // push <a> onto the stack
         mnemonic: "push",
         size: 2,
-        impl: (r: Runtime, tokens: number[]) => {
-            const a = resolveArg(r, tokens, 0)
+        impl: (r: Runtime) => {
+            const a = resolveArg(r, 0)
             r.stack.push(a)
             r.pc = r.pc + 2
         }
@@ -46,8 +46,8 @@ export let opcodes: Opcode[] = [
         // pop the top element from the stack and write it into <a>; empty stack = error
         mnemonic: "pop",
         size: 2,
-        impl: (r: Runtime, tokens: number[]) => {
-            const aIdx = resolveRegisterIdx(r, tokens, 0)
+        impl: (r: Runtime) => {
+            const aIdx = resolveRegisterIdx(r, 0)
             const value = r.stack.pop()
             if (value == undefined) {
                 throw new Error("unable to pop of an empty stack")
@@ -61,10 +61,10 @@ export let opcodes: Opcode[] = [
         // set <a> to 1 if <b> is equal to <c>; set it to 0 otherwise
         mnemonic: "eq",
         size: 4,
-        impl: (r: Runtime, tokens: number[]) => {
-            const aIdx = resolveRegisterIdx(r, tokens, 0)
-            const b = resolveArg(r, tokens, 1)
-            const c = resolveArg(r, tokens, 2)
+        impl: (r: Runtime) => {
+            const aIdx = resolveRegisterIdx(r, 0)
+            const b = resolveArg(r, 1)
+            const c = resolveArg(r, 2)
             r.registers[aIdx] = (b == c) ? 1 : 0
             r.pc = r.pc + 4
         }
@@ -74,10 +74,10 @@ export let opcodes: Opcode[] = [
         // set <a> to 1 if <b> is greater than <c>; set it to 0 otherwise
         mnemonic: "gt",
         size: 4,
-        impl: (r: Runtime, tokens: number[]) => {
-            const aIdx = resolveRegisterIdx(r, tokens, 0)
-            const b = resolveArg(r, tokens, 1)
-            const c = resolveArg(r, tokens, 2)
+        impl: (r: Runtime) => {
+            const aIdx = resolveRegisterIdx(r, 0)
+            const b = resolveArg(r, 1)
+            const c = resolveArg(r, 2)
             r.registers[aIdx] = (b > c) ? 1 : 0
             r.pc = r.pc + 4
         }
@@ -87,8 +87,8 @@ export let opcodes: Opcode[] = [
         // jump to <a>
         mnemonic: "jmp",
         size: 2,
-        impl: (r: Runtime, tokens: number[]) => {
-            const a = resolveArg(r, tokens, 0)
+        impl: (r: Runtime) => {
+            const a = resolveArg(r, 0)
             r.pc = a
         }
     },
@@ -97,9 +97,9 @@ export let opcodes: Opcode[] = [
         // if <a> is nonzero, jump to <b>
         mnemonic: "jt",
         size: 3,
-        impl: (r: Runtime, tokens: number[]) => {
-            const a = resolveArg(r, tokens, 0)
-            const b = resolveArg(r, tokens, 1)
+        impl: (r: Runtime) => {
+            const a = resolveArg(r, 0)
+            const b = resolveArg(r, 1)
             if (a != 0) {
                 r.pc = b
                 return
@@ -112,9 +112,9 @@ export let opcodes: Opcode[] = [
         // if <a> is zero, jump to <b>
         mnemonic: "jf",
         size: 3,
-        impl: (r: Runtime, tokens: number[]) => {
-            const a = resolveArg(r, tokens, 0)
-            const b = resolveArg(r, tokens, 1)
+        impl: (r: Runtime) => {
+            const a = resolveArg(r, 0)
+            const b = resolveArg(r, 1)
             if (a == 0) {
                 r.pc = b
                 return
@@ -127,10 +127,10 @@ export let opcodes: Opcode[] = [
         // assign into <a> the sum of <b> and <c> (modulo 32768)
         mnemonic: "add",
         size: 4,
-        impl(r: Runtime, tokens: number[]) {
-            const aIdx = resolveRegisterIdx(r, tokens, 0)
-            const b = resolveArg(r, tokens, 1)
-            const c = resolveArg(r, tokens, 2)
+        impl(r: Runtime) {
+            const aIdx = resolveRegisterIdx(r, 0)
+            const b = resolveArg(r, 1)
+            const c = resolveArg(r, 2)
 
             r.registers[aIdx] = (b + c) % registerOffset
             r.pc = r.pc + 4
@@ -141,10 +141,10 @@ export let opcodes: Opcode[] = [
         // store into <a> the product of <b> and <c> (modulo 32768)
         mnemonic: "mult",
         size: 4,
-        impl: (r: Runtime, tokens: number[]) => {
-            const aIdx = resolveRegisterIdx(r, tokens, 0)
-            const b = resolveArg(r, tokens, 1)
-            const c = resolveArg(r, tokens, 2)
+        impl: (r: Runtime) => {
+            const aIdx = resolveRegisterIdx(r, 0)
+            const b = resolveArg(r, 1)
+            const c = resolveArg(r, 2)
             r.registers[aIdx] = (b * c) % registerOffset
             r.pc = r.pc + 4
         }
@@ -154,10 +154,10 @@ export let opcodes: Opcode[] = [
         // store into <a> the remainder of <b> divided by <c>
         mnemonic: "mod",
         size: 4,
-        impl: (r: Runtime, tokens: number[]) => {
-            const aIdx = resolveRegisterIdx(r, tokens, 0)
-            const b = resolveArg(r, tokens, 1)
-            const c = resolveArg(r, tokens, 2)
+        impl: (r: Runtime) => {
+            const aIdx = resolveRegisterIdx(r, 0)
+            const b = resolveArg(r, 1)
+            const c = resolveArg(r, 2)
             r.registers[aIdx] = b % c
             r.pc = r.pc + 4
         }
@@ -167,10 +167,10 @@ export let opcodes: Opcode[] = [
         // stores into <a> the bitwise and of <b> and <c>
         mnemonic: "and",
         size: 4,
-        impl: (r: Runtime, tokens: number[]) => {
-            const aIdx = resolveRegisterIdx(r, tokens, 0)
-            const b = resolveArg(r, tokens, 1)
-            const c = resolveArg(r, tokens, 2)
+        impl: (r: Runtime) => {
+            const aIdx = resolveRegisterIdx(r, 0)
+            const b = resolveArg(r, 1)
+            const c = resolveArg(r, 2)
             r.registers[aIdx] = b & c
             r.pc = r.pc + 4
         }
@@ -180,10 +180,10 @@ export let opcodes: Opcode[] = [
         // stores into <a> the bitwise or of <b> and <c>
         mnemonic: "or",
         size: 4,
-        impl: (r: Runtime, tokens: number[]) => {
-            const aIdx = resolveRegisterIdx(r, tokens, 0)
-            const b = resolveArg(r, tokens, 1)
-            const c = resolveArg(r, tokens, 2)
+        impl: (r: Runtime) => {
+            const aIdx = resolveRegisterIdx(r, 0)
+            const b = resolveArg(r, 1)
+            const c = resolveArg(r, 2)
             r.registers[aIdx] = b | c
             r.pc = r.pc + 4
         }
@@ -193,9 +193,9 @@ export let opcodes: Opcode[] = [
         // stores 15-bit bitwise inverse of <b> in <a>
         mnemonic: "not",
         size: 3,
-        impl: (r: Runtime, tokens: number[]) => {
-            const aIdx = resolveRegisterIdx(r, tokens, 0)
-            const b = resolveArg(r, tokens, 1)
+        impl: (r: Runtime) => {
+            const aIdx = resolveRegisterIdx(r, 0)
+            const b = resolveArg(r, 1)
             r.registers[aIdx] = (b ^ 0b111111111111111) & 0b111111111111111
             r.pc = r.pc + 3
         }
@@ -205,9 +205,9 @@ export let opcodes: Opcode[] = [
         // read memory at address <b> and write it to <a>
         mnemonic: "rmem",
         size: 3,
-        impl: (r: Runtime, tokens: number[]) => {
-            const aIdx = resolveRegisterIdx(r, tokens, 0)
-            const b = resolveArg(r, tokens, 1)
+        impl: (r: Runtime) => {
+            const aIdx = resolveRegisterIdx(r, 0)
+            const b = resolveArg(r, 1)
 
             r.registers[aIdx] = r.memory[b]
             r.pc = r.pc + 3
@@ -218,10 +218,10 @@ export let opcodes: Opcode[] = [
         // write the value from <b> into memory at address <a>
         mnemonic: "wmem",
         size: 3,
-        impl: (r: Runtime, tokens: number[]) => {
-            const a = resolveArg(r, tokens, 0)
-            const b = resolveArg(r, tokens, 1)
-            
+        impl: (r: Runtime) => {
+            const a = resolveArg(r, 0)
+            const b = resolveArg(r, 1)
+
             r.memory[a] = b
             r.pc = r.pc + 3
         }
@@ -231,8 +231,8 @@ export let opcodes: Opcode[] = [
         // write the address of the next instruction to the stack and jump to <a>
         mnemonic: "call",
         size: 2,
-        impl: (r: Runtime, tokens: number[]) => {
-            const a = resolveArg(r, tokens, 0)
+        impl: (r: Runtime) => {
+            const a = resolveArg(r, 0)
             r.stack.push(r.pc + 2)
             r.pc = a
         }
@@ -242,7 +242,7 @@ export let opcodes: Opcode[] = [
         // remove the top element from the stack and jump to it; empty stack = halt
         mnemonic: "ret",
         size: 1,
-        impl: (r: Runtime, tokens: number[]) => {
+        impl: (r: Runtime) => {
             const value = r.stack.pop()
             if (value == undefined) {
                 r.running = false
@@ -256,9 +256,9 @@ export let opcodes: Opcode[] = [
         // write the character represented by ascii code <a> to the terminal
         mnemonic: "out",
         size: 2,
-        impl: (r: Runtime, tokens: number[]) => {
+        impl: (r: Runtime) => {
             // TODO test output from registers
-            let value = resolveArg(r, tokens, 0)
+            let value = resolveArg(r, 0)
             r.stdout(String.fromCharCode(value))
             r.pc = r.pc + 2
         }
@@ -274,15 +274,15 @@ export let opcodes: Opcode[] = [
         // no operation
         mnemonic: "noop",
         size: 1,
-        impl: (r: Runtime, _: number[]) => {
+        impl: (r: Runtime) => {
             r.pc = r.pc + 1
         }
     },
 ]
 
-function resolveArg(runtime: Runtime, tokens: number[], argument: number): number {
+function resolveArg(runtime: Runtime, argument: number): number {
     const offset = runtime.pc + argument + 1
-    const token = tokens[offset]
+    const token = runtime.memory[offset]
 
     if (token < registerOffset) { // literal
         return token
@@ -294,9 +294,9 @@ function resolveArg(runtime: Runtime, tokens: number[], argument: number): numbe
     throw new Error(`invalid token value as argument`)
 }
 
-function resolveRegisterIdx(runtime: Runtime, tokens: number[], argument: number): number {
+function resolveRegisterIdx(runtime: Runtime, argument: number): number {
     const offset = runtime.pc + argument + 1
-    const token = tokens[offset]
+    const token = runtime.memory[offset]
 
     if (token >= registerOffset && token < (registerOffset + 8)) {
         return token - registerOffset

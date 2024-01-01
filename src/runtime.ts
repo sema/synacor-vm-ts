@@ -1,12 +1,5 @@
 export class Runtime {
     pc!: number
-
-    // program contains the tokens defining the program.
-    // The program is also loaded into memory starting at index 0.
-    // The sample program overwrites parts of the program. It is unclear 
-    // if the intention is to execute the original program or the modified
-    // program. For now we keep the program and memory separate.
-    program!: number[]
     running!: boolean
     memory!: number[]
     registers!: number[]
@@ -19,7 +12,6 @@ export class Runtime {
 
     constructor(tokens: number[]) {
         this.pc = 0;
-        this.program = tokens
         this.running = true;
         this.memory = Array<number>(2^15)
         this.registers = Array<number>(8)
@@ -40,7 +32,7 @@ export class Runtime {
             this.memory[i] = 0
         }
         // copy program into memory
-        this.program.forEach((value, idx) => {
+        tokens.forEach((value, idx) => {
             this.memory[idx] = value
         })
     }

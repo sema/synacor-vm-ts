@@ -52,7 +52,7 @@ describe('testing interpreter output', () => {
         opHalt,          // 6: halt
     ]
     let world = new World(tokens)
-    interpret(world.runtime, tokens)
+    interpret(world.runtime)
 
     expect(world.runtime.registers[reg0idx]).toBe(10)
   });
@@ -66,7 +66,7 @@ describe('testing interpreter output', () => {
         opHalt,          // 10: halt
     ]
     let world = new World(tokens)
-    interpret(world.runtime, tokens)
+    interpret(world.runtime)
 
     expect(world.runtime.registers[reg0idx]).toBe(10)
     expect(world.runtime.registers[reg1idx]).toBe(20)
@@ -76,7 +76,7 @@ describe('testing interpreter output', () => {
         opRet
     ]
     let world = new World(tokens)
-    interpret(world.runtime, tokens)
+    interpret(world.runtime)
   });
   test('opSet sets value for register 0', () => {
     const tokens = [
@@ -84,7 +84,7 @@ describe('testing interpreter output', () => {
         opHalt,
     ]
     let world = new World(tokens)
-    interpret(world.runtime, tokens)
+    interpret(world.runtime)
 
     expect(world.runtime.registers[reg0idx]).toBe(10)
   });
@@ -94,7 +94,7 @@ describe('testing interpreter output', () => {
         opHalt,
     ]
     let world = new World(tokens)
-    interpret(world.runtime, tokens)
+    interpret(world.runtime)
 
     expect(world.runtime.registers[reg7idx]).toBe(10)
   });
@@ -107,7 +107,7 @@ describe('testing interpreter output', () => {
         opHalt,          // 9: halt
     ]
     let world = new World(tokens)
-    interpret(world.runtime, tokens)
+    interpret(world.runtime)
 
     expect(world.runtime.registers[reg0idx]).toBe(20)
   });
@@ -141,7 +141,7 @@ describe('testing interpreter output', () => {
         opHalt,
     ]
     let world = new World(tokens)
-    interpret(world.runtime, tokens)
+    interpret(world.runtime)
 
     expect(world.runtime.registers[reg0idx]).toBe(15)
   });
@@ -151,7 +151,7 @@ describe('testing interpreter output', () => {
         opHalt,
     ]
     let world = new World(tokens)
-    interpret(world.runtime, tokens)
+    interpret(world.runtime)
 
     expect(world.runtime.registers[reg0idx]).toBe(30)
   });
@@ -161,7 +161,7 @@ describe('testing interpreter output', () => {
         opHalt,
     ]
     let world = new World(tokens)
-    interpret(world.runtime, tokens)
+    interpret(world.runtime)
 
     expect(world.runtime.registers[reg0idx]).toBe(17536)
   });
@@ -171,7 +171,7 @@ describe('testing interpreter output', () => {
         opHalt,
     ]
     let world = new World(tokens)
-    interpret(world.runtime, tokens)
+    interpret(world.runtime)
 
     expect(world.runtime.registers[reg0idx]).toBe(1)
   });
@@ -182,7 +182,7 @@ describe('testing interpreter output', () => {
         opHalt,
     ]
     let world = new World(tokens)
-    interpret(world.runtime, tokens)
+    interpret(world.runtime)
 
     expect(world.runtime.registers[reg0idx]).toBe(10)
   });
@@ -193,7 +193,7 @@ describe('testing interpreter output', () => {
         opHalt,
     ]
     let world = new World(tokens)
-    interpret(world.runtime, tokens)
+    interpret(world.runtime)
 
     expect(world.runtime.registers[reg0idx]).toBe(20)
   });
@@ -204,7 +204,7 @@ describe('testing interpreter output', () => {
         101,
     ]
     let world = new World(tokens)
-    interpret(world.runtime, tokens)
+    interpret(world.runtime)
 
     expect(world.runtime.registers[reg0idx]).toBe(101)
   });
@@ -214,7 +214,7 @@ describe('testing interpreter output', () => {
         opHalt,
     ]
     let world = new World(tokens)
-    interpret(world.runtime, tokens)
+    interpret(world.runtime)
 
     expect(world.runtime.registers[reg0idx]).toBe(3)
   });
@@ -224,7 +224,7 @@ describe('testing interpreter output', () => {
         opHalt,
     ]
     let world = new World(tokens)
-    interpret(world.runtime, tokens)
+    interpret(world.runtime)
 
     expect(world.runtime.registers[reg0idx]).toBe(4)
   });
@@ -234,7 +234,7 @@ describe('testing interpreter output', () => {
         opHalt,
     ]
     let world = new World(tokens)
-    interpret(world.runtime, tokens)
+    interpret(world.runtime)
 
     expect(world.runtime.registers[reg0idx]).toBe(0)
   });
@@ -244,7 +244,7 @@ describe('testing interpreter output', () => {
         opHalt,
     ]
     let world = new World(tokens)
-    interpret(world.runtime, tokens)
+    interpret(world.runtime)
 
     expect(world.runtime.registers[reg0idx]).toBe(3)
   });
@@ -254,7 +254,7 @@ describe('testing interpreter output', () => {
         opHalt,
     ]
     let world = new World(tokens)
-    interpret(world.runtime, tokens)
+    interpret(world.runtime)
 
     expect(world.runtime.registers[reg0idx]).toBe(0b111111111111111)
   });
@@ -264,7 +264,7 @@ describe('testing interpreter output', () => {
         opHalt,
     ]
     let world = new World(tokens)
-    interpret(world.runtime, tokens)
+    interpret(world.runtime)
 
     expect(world.runtime.registers[reg0idx]).toBe(0b000000000000000)
   });
@@ -274,7 +274,7 @@ describe('testing interpreter output', () => {
         opHalt,
     ]
     let world = new World(tokens)
-    interpret(world.runtime, tokens)
+    interpret(world.runtime)
 
     expect(world.runtime.registers[reg0idx]).toBe(5)
   });
@@ -284,7 +284,7 @@ describe('testing interpreter output', () => {
         opHalt,
     ]
     let world = new World(tokens)
-    interpret(world.runtime, tokens)
+    interpret(world.runtime)
 
     expect(world.runtime.registers[reg0idx]).toBe(1)
   });
@@ -294,7 +294,7 @@ describe('testing interpreter output', () => {
         opHalt,
     ]
     let world = new World(tokens)
-    interpret(world.runtime, tokens)
+    interpret(world.runtime)
 
     expect(world.runtime.registers[reg0idx]).toBe(0)
   });
@@ -304,7 +304,7 @@ describe('testing interpreter output', () => {
         opHalt,
     ]
     let world = new World(tokens)
-    interpret(world.runtime, tokens)
+    interpret(world.runtime)
 
     expect(world.runtime.registers[reg0idx]).toBe(1)
   });
@@ -314,7 +314,7 @@ describe('testing interpreter output', () => {
         opHalt,
     ]
     let world = new World(tokens)
-    interpret(world.runtime, tokens)
+    interpret(world.runtime)
 
     expect(world.runtime.registers[reg0idx]).toBe(0)
   });
@@ -324,7 +324,7 @@ describe('testing interpreter output', () => {
         opHalt,
     ]
     let world = new World(tokens)
-    interpret(world.runtime, tokens)
+    interpret(world.runtime)
 
     expect(world.runtime.registers[reg0idx]).toBe(0)
   });
@@ -341,7 +341,7 @@ describe('testing interpreter output', () => {
         opHalt,
     ]
     let world = new World(tokens)
-    interpret(world.runtime, tokens)
+    interpret(world.runtime)
 
     expect(world.runtime.stdoutBuffer).toBe("")
     expect(world.mockStdoutWriter.mock.calls).toHaveLength(2)
@@ -371,7 +371,7 @@ function testConditionalJump(op: number, literal: number, expectJumped: boolean)
         opHalt,          // 10: halt
     ]
     let world = new World(tokens)
-    interpret(world.runtime, tokens)
+    interpret(world.runtime)
 
     if (expectJumped) {
       expect(world.runtime.registers[reg0idx]).toBe(20)
@@ -390,7 +390,7 @@ function testConditionalRegisterJump(op: number, literal: number, expectJumped: 
         opHalt,               // 13: halt
     ]
     let world = new World(tokens)
-    interpret(world.runtime, tokens)
+    interpret(world.runtime)
 
     if (expectJumped) {
       expect(world.runtime.registers[reg0idx]).toBe(20)
