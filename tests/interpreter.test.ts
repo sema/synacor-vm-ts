@@ -111,6 +111,17 @@ describe('testing interpreter output', () => {
 
     expect(world.runtime.registers[reg0idx]).toBe(15)
   });
+  test('opPush and opPop carries the value through', () => {
+    let world = new World()
+    const tokens = [
+        opPush, 10,
+        opPop, reg0,
+        opHalt,
+    ]
+    interpret(world.runtime, tokens)
+
+    expect(world.runtime.registers[reg0idx]).toBe(10)
+  });
   test('opAdd overflow is resolved using modulo register-offset', () => {
     let world = new World()
     const tokens = [

@@ -35,12 +35,26 @@ export let opcodes: Opcode[] = [
         // push <a> onto the stack
         mnemonic: "push",
         size: 2,
+        impl: (r: Runtime, tokens: number[]) => {
+            const a = resolveArg(r, tokens, 0)
+            r.stack.push(a)
+            r.pc = r.pc + 2
+        }
     },
     { 
         // opcode 3
         // pop the top element from the stack and write it into <a>; empty stack = error
         mnemonic: "pop",
         size: 2,
+        impl: (r: Runtime, tokens: number[]) => {
+            const aIdx = resolveRegisterIdx(r, tokens, 0)
+            const value = r.stack.pop()
+            if (value == undefined) {
+                throw new Error("unable to pop of an empty stack")
+            }
+            r.registers[aIdx] = value
+            r.pc = r.pc + 2
+        }
     },
     { 
         // opcode 4
