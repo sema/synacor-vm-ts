@@ -13,10 +13,12 @@ const challenge_bin_path = process.argv[3]
 let tokens = parse(challenge_bin_path)
 console.log(`Parsed ${tokens.length} tokens from ${challenge_bin_path}`)
 
+const debug = process.env["DEBUG"] == "1"
+
 switch (command) {
 case "execute":
     let runtime = new Runtime()
-    interpret(runtime, tokens)
+    interpret(runtime, tokens, debug)
     break
 case "prettyprint":
     prettyPrint(tokens)
