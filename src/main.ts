@@ -18,7 +18,7 @@ const debug = process.env["DEBUG"] == "1"
 switch (command) {
 case "execute":
     let runtime = new Runtime(tokens)
-    interpret(runtime, debug)
+    await interpret(runtime, debug)
     break
 case "prettyprint":
     prettyPrint(tokens)

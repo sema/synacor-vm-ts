@@ -2,7 +2,7 @@ import { opcodes } from './opcodes'
 import { Runtime } from './runtime'
 import { formatInstruction } from './prettyprinter'
 
-export function interpret(runtime: Runtime, trace?: boolean) {
+export async function interpret(runtime: Runtime, trace?: boolean) {
     while (runtime.running) {
         const opcodeIndex = runtime.memory[runtime.pc]
         if (opcodeIndex == undefined) {
@@ -21,6 +21,6 @@ export function interpret(runtime: Runtime, trace?: boolean) {
             console.log(formatInstruction(runtime.pc, runtime.memory, runtime))
         }
 
-        opcode.impl(runtime)
+        await opcode.impl(runtime)
     }
 }

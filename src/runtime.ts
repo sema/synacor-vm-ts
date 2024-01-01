@@ -1,3 +1,6 @@
+import { Mutex } from 'async-mutex'
+import { createInterface } from 'readline/promises'
+
 export class Runtime {
     pc!: number
     running!: boolean
@@ -5,10 +8,11 @@ export class Runtime {
     registers!: number[]
     stack!: number[]
     stdoutBuffer!: string
+    stdinBuffer!: string
 
     // functions interacting with the outside world, overwritten in tests
     stdoutLineWriter!: (data: string) => void
-    stdinLineReader!: () => string
+    stdinLineReader!: () => Promise<string>
 
     constructor(tokens: number[]) {
         this.pc = 0;
@@ -17,9 +21,14 @@ export class Runtime {
         this.registers = Array<number>(8)
         this.stack = Array<number>()
         this.stdoutBuffer = ""
+        this.stdinBuffer = ""
         this.stdoutLineWriter = console.info
-        this.stdinLineReader = () => {
-            throw new Error("stdin reader not implemented")
+        this.stdinLineReader = async () => {
+            let reader = createInterface({
+                input: process.stdin,
+            })
+            const answer = await reader.question("")
+            return answer + "\n"
         }
 
         // zero all registers
@@ -50,5 +59,15 @@ export class Runtime {
             this.stdoutLineWriter(this.stdoutBuffer)
             this.stdoutBuffer = ""
         }
+    }
+
+    async stdinNextChar(): Promise<string> {
+        if (this.stdinBuffer == "") {
+            this.stdinBuffer = await this.stdinLineReader()
+        }
+
+        const nextChar = this.stdinBuffer[0]
+        this.stdinBuffer = this.stdinBuffer.substring(1, this.stdinBuffer.length)
+        return nextChar
     }
 }
