@@ -153,18 +153,38 @@ export let opcodes: Opcode[] = [
         // stores into <a> the bitwise and of <b> and <c>
         mnemonic: "and",
         size: 4,
+        impl: (r: Runtime, tokens: number[]) => {
+            const aIdx = resolveRegisterIdx(r, tokens, 0)
+            const b = resolveArg(r, tokens, 1)
+            const c = resolveArg(r, tokens, 2)
+            r.registers[aIdx] = b & c
+            r.pc = r.pc + 4
+        }
     },
     { 
         // opcode 13
         // stores into <a> the bitwise or of <b> and <c>
         mnemonic: "or",
         size: 4,
+        impl: (r: Runtime, tokens: number[]) => {
+            const aIdx = resolveRegisterIdx(r, tokens, 0)
+            const b = resolveArg(r, tokens, 1)
+            const c = resolveArg(r, tokens, 2)
+            r.registers[aIdx] = b | c
+            r.pc = r.pc + 4
+        }
     },
     { 
         // opcode 14
         // stores 15-bit bitwise inverse of <b> in <a>
         mnemonic: "not",
         size: 3,
+        impl: (r: Runtime, tokens: number[]) => {
+            const aIdx = resolveRegisterIdx(r, tokens, 0)
+            const b = resolveArg(r, tokens, 1)
+            r.registers[aIdx] = (b ^ 0b111111111111111) & 0b111111111111111
+            r.pc = r.pc + 3
+        }
     },
     { 
         // opcode 15

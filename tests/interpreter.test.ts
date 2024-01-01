@@ -122,6 +122,66 @@ describe('testing interpreter output', () => {
 
     expect(world.runtime.registers[reg0idx]).toBe(10)
   });
+  test('opAnd 0x011 & 0x011 = 0x011', () => {
+    let world = new World()
+    const tokens = [
+        opAnd, reg0, 3, 3, // 3 = 0x011
+        opHalt,
+    ]
+    interpret(world.runtime, tokens)
+
+    expect(world.runtime.registers[reg0idx]).toBe(3)
+  });
+  test('opAnd 0x110 & 0x101 = 0x100', () => {
+    let world = new World()
+    const tokens = [
+        opAnd, reg0, 6, 5,
+        opHalt,
+    ]
+    interpret(world.runtime, tokens)
+
+    expect(world.runtime.registers[reg0idx]).toBe(4)
+  });
+  test('opOr 0x000 & 0x000 = 0x000', () => {
+    let world = new World()
+    const tokens = [
+        opOr, reg0, 0, 0,
+        opHalt,
+    ]
+    interpret(world.runtime, tokens)
+
+    expect(world.runtime.registers[reg0idx]).toBe(0)
+  });
+  test('opOr 0x010 & 0x001 = 0x011', () => {
+    let world = new World()
+    const tokens = [
+        opOr, reg0, 2, 1,
+        opHalt,
+    ]
+    interpret(world.runtime, tokens)
+
+    expect(world.runtime.registers[reg0idx]).toBe(3)
+  });
+  test('opNot flips all zero bits in the first 15 bits', () => {
+    let world = new World()
+    const tokens = [
+        opNot, reg0, 0b000000000000000,
+        opHalt,
+    ]
+    interpret(world.runtime, tokens)
+
+    expect(world.runtime.registers[reg0idx]).toBe(0b111111111111111)
+  });
+  test('opNot flips all high bits in the first 15 bits', () => {
+    let world = new World()
+    const tokens = [
+        opNot, reg0, 0b111111111111111,
+        opHalt,
+    ]
+    interpret(world.runtime, tokens)
+
+    expect(world.runtime.registers[reg0idx]).toBe(0b000000000000000)
+  });
   test('opAdd overflow is resolved using modulo register-offset', () => {
     let world = new World()
     const tokens = [
