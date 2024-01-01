@@ -141,12 +141,26 @@ export let opcodes: Opcode[] = [
         // store into <a> the product of <b> and <c> (modulo 32768)
         mnemonic: "mult",
         size: 4,
+        impl: (r: Runtime, tokens: number[]) => {
+            const aIdx = resolveRegisterIdx(r, tokens, 0)
+            const b = resolveArg(r, tokens, 1)
+            const c = resolveArg(r, tokens, 2)
+            r.registers[aIdx] = (b * c) % registerOffset
+            r.pc = r.pc + 4
+        }
     },
     { 
         // opcode 11
         // store into <a> the remainder of <b> divided by <c>
         mnemonic: "mod",
         size: 4,
+        impl: (r: Runtime, tokens: number[]) => {
+            const aIdx = resolveRegisterIdx(r, tokens, 0)
+            const b = resolveArg(r, tokens, 1)
+            const c = resolveArg(r, tokens, 2)
+            r.registers[aIdx] = b % c
+            r.pc = r.pc + 4
+        }
     },
     { 
         // opcode 12

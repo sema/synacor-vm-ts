@@ -145,6 +145,36 @@ describe('testing interpreter output', () => {
 
     expect(world.runtime.registers[reg0idx]).toBe(15)
   });
+  test('opMult multiplies two numbers', () => {
+    let world = new World()
+    const tokens = [
+        opMult, reg0, 5, 6, // reg0 = 5 * 6
+        opHalt,
+    ]
+    interpret(world.runtime, tokens)
+
+    expect(world.runtime.registers[reg0idx]).toBe(30)
+  });
+  test('opMult resolves overflows by modulo', () => {
+    let world = new World()
+    const tokens = [
+        opMult, reg0, 16768, 3,
+        opHalt,
+    ]
+    interpret(world.runtime, tokens)
+
+    expect(world.runtime.registers[reg0idx]).toBe(17536)
+  });
+  test('opMod calculates mod', () => {
+    let world = new World()
+    const tokens = [
+        opMod, reg0, 10, 3,
+        opHalt,
+    ]
+    interpret(world.runtime, tokens)
+
+    expect(world.runtime.registers[reg0idx]).toBe(1)
+  });
   test('opPush and opPop carries the value through', () => {
     let world = new World()
     const tokens = [
