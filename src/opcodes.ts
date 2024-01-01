@@ -67,12 +67,30 @@ export let opcodes: Opcode[] = [
         // if <a> is nonzero, jump to <b>
         mnemonic: "jt",
         size: 3,
+        impl: (r: Runtime, tokens: number[]) => {
+            const a = resolveArg(r, tokens, 0)
+            const b = resolveArg(r, tokens, 1)
+            if (a != 0) {
+                r.pc = b
+                return
+            }
+            r.pc = r.pc + 3
+        }
     },
     { 
         // opcode 8
         // if <a> is zero, jump to <b>
         mnemonic: "jf",
         size: 3,
+        impl: (r: Runtime, tokens: number[]) => {
+            const a = resolveArg(r, tokens, 0)
+            const b = resolveArg(r, tokens, 1)
+            if (a == 0) {
+                r.pc = b
+                return
+            }
+            r.pc = r.pc + 3
+        }
     },
     { 
         // opcode 9

@@ -76,6 +76,30 @@ describe('testing interpreter output', () => {
 
     expect(world.runtime.registers[reg0idx]).toBe(20)
   });
+  test('opJt jumps to target if arg0 is non-zero', () => {
+    testConditionalJump(opJt, 10, true)
+  });
+  test('opJt skips arg0 is zero', () => {
+    testConditionalJump(opJt, 0, false)
+  });
+  test('opJt jumps to target if reg0 is non-zero', () => {
+    testConditionalRegisterJump(opJt, 10, true)
+  });
+  test('opJt skips reg0 is zero', () => {
+    testConditionalRegisterJump(opJt, 0, false)
+  });
+  test('opJf jumps to target if arg0 is zero', () => {
+    testConditionalJump(opJf, 0, true)
+  });
+  test('opJf skips arg0 is non-zero', () => {
+    testConditionalJump(opJf, 10, false)
+  });
+  test('opJf jumps to target if reg0 is zero', () => {
+    testConditionalRegisterJump(opJf, 0, true)
+  });
+  test('opJf skips reg0 is non-zero', () => {
+    testConditionalRegisterJump(opJf, 10, false)
+  });
   test('opOut flushes literals when newline is encountered', () => {
     let world = new World()
     const tokens = [
@@ -108,4 +132,41 @@ class World {
         this.runtime = new Runtime()
         this.runtime.stdoutLineWriter = this.mockStdoutWriter
     }
+}
+
+function testConditionalJump(op: number, literal: number, expectJumped: boolean) {
+  let world = new World()
+    const tokens = [
+        op, literal, 7,  // 0: goto 3 or 7
+        opSet, reg0, 10, // 3: reg0 = 10
+        opHalt,          // 6: halt 
+        opSet, reg0, 20, // 7: reg0 = 20
+        opHalt,          // 10: halt
+    ]
+    interpret(world.runtime, tokens)
+
+    if (expectJumped) {
+      expect(world.runtime.registers[reg0idx]).toBe(20)
+    } else {
+      expect(world.runtime.registers[reg0idx]).toBe(10)
+    } 
+}
+
+function testConditionalRegisterJump(op: number, literal: number, expectJumped: boolean) {
+  let world = new World()
+    const tokens = [
+        opSet, reg0, literal, // 0: reg0 = <literal>
+        op, reg0, 10,          // 3: goto 6 or 10
+        opSet, reg0, 10,      // 6: reg0 = 10
+        opHalt,               // 9: halt 
+        opSet, reg0, 20,      // 10: reg0 = 20
+        opHalt,               // 13: halt
+    ]
+    interpret(world.runtime, tokens)
+
+    if (expectJumped) {
+      expect(world.runtime.registers[reg0idx]).toBe(20)
+    } else {
+      expect(world.runtime.registers[reg0idx]).toBe(10)
+    } 
 }
