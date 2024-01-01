@@ -24,7 +24,45 @@ const opOut = 19
 const opIn = 20
 const opNoop = 21
 
+const reg0 = 32768
+const reg1 = 32769
+const reg2 = 32770
+const reg3 = 32771
+const reg4 = 32772
+const reg5 = 32773
+const reg6 = 32774
+const reg7 = 32775
+
+const reg0idx = 0
+const reg1idx = 1
+const reg2idx = 2
+const reg3idx = 3
+const reg4idx = 4
+const reg5idx = 5
+const reg6idx = 6
+const reg7idx = 7
+
 describe('testing interpreter output', () => {
+  test('opSet sets value for register 0', () => {
+    let world = new World()
+    const tokens = [
+        opSet, reg0, 10,  // reg0 = 10
+        opHalt,
+    ]
+    interpret(world.runtime, tokens)
+
+    expect(world.runtime.registers[reg0idx]).toBe(10)
+  });
+  test('opSet sets value for register 0', () => {
+    let world = new World()
+    const tokens = [
+        opSet, reg7, 10,  // reg7 = 10
+        opHalt,
+    ]
+    interpret(world.runtime, tokens)
+
+    expect(world.runtime.registers[reg7idx]).toBe(10)
+  });
   test('opOut flushes literals when newline is encountered', () => {
     let world = new World()
     const tokens = [

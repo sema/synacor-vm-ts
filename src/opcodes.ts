@@ -21,6 +21,12 @@ export let opcodes: Opcode[] = [
         // set register <a> to the value of <b>
         mnemonic: "set",
         size: 3,
+        impl: (r: Runtime, tokens: number[]) => {
+            let aIdx = resolveRegisterIdx(r, tokens, 0)
+            let b = resolveArg(r, tokens, 1)
+            r.registers[aIdx] = b
+            r.pc = r.pc + 3
+        }
     },
     { 
         // opcode 2
@@ -165,4 +171,16 @@ function resolveArg(runtime: Runtime, tokens: number[], argument: number): numbe
     }
 
     throw new Error(`invalid token value as argument`)
+}
+
+function resolveRegisterIdx(runtime: Runtime, tokens: number[], argument: number): number {
+    const offset = runtime.pc + argument + 1
+    const token = tokens[offset]
+
+    if (token >= 32768 && token < 32776) {
+        return token - 32768
+    }
+
+    throw new Error(`invalid register reference as argument`)
+
 }
