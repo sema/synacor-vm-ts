@@ -52,7 +52,7 @@ export let opcodes: Opcode[] = [
             const b = resolveArg(r, tokens, 1)
             const c = resolveArg(r, tokens, 2)
             r.registers[aIdx] = (b == c) ? 1 : 0
-            r.pc = r.pc = 4
+            r.pc = r.pc + 4
         }
     },
     { 
@@ -65,7 +65,7 @@ export let opcodes: Opcode[] = [
             const b = resolveArg(r, tokens, 1)
             const c = resolveArg(r, tokens, 2)
             r.registers[aIdx] = (b > c) ? 1 : 0
-            r.pc = r.pc = 4
+            r.pc = r.pc + 4
         }
     },
     { 
