@@ -1,5 +1,7 @@
 import {parse} from './parse'
 import {prettyPrint} from './prettyprinter'
+import {interpret} from './interpreter'
+import {Runtime} from './runtime'
 
 if (process.argv.length != 4) {
     console.log("usage: <execute|prettyprint> <path-to-challenge.bin>")
@@ -13,7 +15,8 @@ console.log(`Parsed ${tokens.length} tokens from ${challenge_bin_path}`)
 
 switch (command) {
 case "execute":
-    throw new Error("execute not implemented yet")
+    let runtime = new Runtime()
+    interpret(runtime, tokens)
     break
 case "prettyprint":
     prettyPrint(tokens)

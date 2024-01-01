@@ -1,7 +1,9 @@
+import { Runtime } from './runtime'
 
 export class Opcode {
     mnemonic!: string;
     size!: number;
+    impl?: (r: Runtime, tokens: number[]) => void;
 }
 
 export let opcodes: Opcode[] = [
@@ -10,6 +12,9 @@ export let opcodes: Opcode[] = [
         // stop execution and terminate the program
         mnemonic: "halt",
         size: 1,
+        impl: (r: Runtime, tokens: number[]) => {
+            r.running = false
+        }
     },
     { 
         // opcode 1
@@ -124,6 +129,12 @@ export let opcodes: Opcode[] = [
         // write the character represented by ascii code <a> to the terminal
         mnemonic: "out",
         size: 2,
+        impl: (r: Runtime, tokens: number[]) => {
+            // TODO test output from registers
+            let value = resolveArg(r, tokens, 0)
+            r.stdout(String.fromCharCode(value))
+            r.pc = r.pc + 2
+        }
     },
     { 
         // opcode 20
@@ -136,5 +147,22 @@ export let opcodes: Opcode[] = [
         // no operation
         mnemonic: "noop",
         size: 1,
+        impl: (r: Runtime, _: number[]) => {
+            r.pc = r.pc + 1
+        }
     },
 ]
+
+function resolveArg(runtime: Runtime, tokens: number[], argument: number): number {
+    const offset = runtime.pc + argument + 1
+    const token = tokens[offset]
+
+    if (token < 32768) { // literal
+        return token
+    } else if (token < 32776) { // register
+        const register = token - 32768
+        return runtime.registers[register]
+    }
+
+    throw new Error(`invalid token value as argument`)
+}

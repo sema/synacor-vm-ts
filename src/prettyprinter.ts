@@ -18,7 +18,7 @@ export function prettyPrint(tokens: number[]) {
 
 }
 
-function formatInstruction(pc: number, tokens: number[]): string {
+export function formatInstruction(pc: number, tokens: number[]): string {
     const opcodeIndex = tokens[pc]
     const opcode = opcodes[opcodeIndex]
     let args: string[] = Array<string>()
