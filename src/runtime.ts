@@ -21,6 +21,11 @@ export class Runtime {
         this.stdinLineReader = () => {
             throw new Error("stdin reader not implemented")
         }
+
+        // zero all registers
+        for (let i = 0; i < 8; i++) {
+            this.registers[i] = 0
+        }
     }
 
     // stdout accumulates output until we encounter a newline and then 

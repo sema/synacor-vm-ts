@@ -1,5 +1,7 @@
 import { Runtime } from './runtime'
 
+export const registerOffset = 32768
+
 export class Opcode {
     mnemonic!: string;
     size!: number;
@@ -199,8 +201,8 @@ function resolveRegisterIdx(runtime: Runtime, tokens: number[], argument: number
     const offset = runtime.pc + argument + 1
     const token = tokens[offset]
 
-    if (token >= 32768 && token < 32776) {
-        return token - 32768
+    if (token >= registerOffset && token < (registerOffset + 8)) {
+        return token - registerOffset
     }
 
     throw new Error(`invalid register reference as argument`)

@@ -1,5 +1,6 @@
 import { interpret } from '../src/interpreter'
 import { Runtime } from '../src/runtime'
+import { registerOffset } from '../src/opcodes'
 
 const opHalt = 0
 const opSet = 1
@@ -24,14 +25,14 @@ const opOut = 19
 const opIn = 20
 const opNoop = 21
 
-const reg0 = 32768
-const reg1 = 32769
-const reg2 = 32770
-const reg3 = 32771
-const reg4 = 32772
-const reg5 = 32773
-const reg6 = 32774
-const reg7 = 32775
+const reg0 = registerOffset + 0
+const reg1 = registerOffset + 1
+const reg2 = registerOffset + 2
+const reg3 = registerOffset + 3
+const reg4 = registerOffset + 4
+const reg5 = registerOffset + 5
+const reg6 = registerOffset + 6
+const reg7 = registerOffset + 7
 
 const reg0idx = 0
 const reg1idx = 1

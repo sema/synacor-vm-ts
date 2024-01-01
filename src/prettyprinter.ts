@@ -1,4 +1,4 @@
-import { opcodes } from './opcodes'
+import { opcodes, registerOffset } from './opcodes'
 
 export function prettyPrint(tokens: number[]) {
     let pc = 0
@@ -31,10 +31,10 @@ export function formatInstruction(pc: number, tokens: number[]): string {
 }
 
 function formatValue(token: number): string {
-    if (token < 32768) {
+    if (token < registerOffset) {
         return token.toString()  // literal
-    } else if (token < 32776) {
-        return `r${token - 32768}` // register
+    } else if (token < (registerOffset + 8)) {
+        return `r${token - registerOffset}` // register
     }
 
     throw new Error(`invalid literal ${token}`)
