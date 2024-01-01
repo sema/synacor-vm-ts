@@ -13,7 +13,7 @@ export class Runtime {
     constructor() {
         this.pc = 0;
         this.running = true;
-        this.memory = Array<number>()
+        this.memory = Array<number>(2^15)
         this.registers = Array<number>(8)
         this.stack = Array<number>()
         this.stdoutBuffer = ""

@@ -205,12 +205,26 @@ export let opcodes: Opcode[] = [
         // read memory at address <b> and write it to <a>
         mnemonic: "rmem",
         size: 3,
+        impl: (r: Runtime, tokens: number[]) => {
+            const aIdx = resolveRegisterIdx(r, tokens, 0)
+            const b = resolveArg(r, tokens, 1)
+
+            r.registers[aIdx] = r.memory[b]
+            r.pc = r.pc + 3
+        }
     },
     { 
         // opcode 16
         // write the value from <b> into memory at address <a>
         mnemonic: "wmem",
         size: 3,
+        impl: (r: Runtime, tokens: number[]) => {
+            const a = resolveArg(r, tokens, 0)
+            const b = resolveArg(r, tokens, 1)
+
+            r.memory[a] = b
+            r.pc = r.pc + 3
+        }
     },
     { 
         // opcode 17

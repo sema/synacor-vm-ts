@@ -186,6 +186,17 @@ describe('testing interpreter output', () => {
 
     expect(world.runtime.registers[reg0idx]).toBe(10)
   });
+  test('opWmem and opRmem writes and reads back data from memory', () => {
+    let world = new World()
+    const tokens = [
+        opWmem, 100, 20,   // mem[100] = 20
+        opRmem, reg0, 100, // reg0 = mem[100]
+        opHalt,
+    ]
+    interpret(world.runtime, tokens)
+
+    expect(world.runtime.registers[reg0idx]).toBe(20)
+  });
   test('opAnd 0x011 & 0x011 = 0x011', () => {
     let world = new World()
     const tokens = [
