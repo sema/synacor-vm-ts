@@ -99,6 +99,14 @@ export let opcodes: Opcode[] = [
         // assign into <a> the sum of <b> and <c> (modulo 32768)
         mnemonic: "add",
         size: 4,
+        impl(r: Runtime, tokens: number[]) {
+            const aIdx = resolveRegisterIdx(r, tokens, 0)
+            const b = resolveArg(r, tokens, 1)
+            const c = resolveArg(r, tokens, 2)
+
+            r.registers[aIdx] = (b + c) % registerOffset
+            r.pc = r.pc + 4
+        },
     },
     { 
         // opcode 10

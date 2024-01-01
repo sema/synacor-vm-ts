@@ -101,6 +101,26 @@ describe('testing interpreter output', () => {
   test('opJf skips reg0 is non-zero', () => {
     testConditionalRegisterJump(opJf, 10, false)
   });
+  test('opAdd adds two numbers', () => {
+    let world = new World()
+    const tokens = [
+        opAdd, reg0, 5, 10, // reg0 = 5 + 10
+        opHalt,
+    ]
+    interpret(world.runtime, tokens)
+
+    expect(world.runtime.registers[reg0idx]).toBe(15)
+  });
+  test('opAdd overflow is resolved using modulo register-offset', () => {
+    let world = new World()
+    const tokens = [
+        opAdd, reg0, 32758, 15,
+        opHalt,
+    ]
+    interpret(world.runtime, tokens)
+
+    expect(world.runtime.registers[reg0idx]).toBe(5)
+  });
   test('opOut flushes literals when newline is encountered', () => {
     let world = new World()
     const tokens = [
