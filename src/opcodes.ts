@@ -47,12 +47,26 @@ export let opcodes: Opcode[] = [
         // set <a> to 1 if <b> is equal to <c>; set it to 0 otherwise
         mnemonic: "eq",
         size: 4,
+        impl: (r: Runtime, tokens: number[]) => {
+            const aIdx = resolveRegisterIdx(r, tokens, 0)
+            const b = resolveArg(r, tokens, 1)
+            const c = resolveArg(r, tokens, 2)
+            r.registers[aIdx] = (b == c) ? 1 : 0
+            r.pc = r.pc = 4
+        }
     },
     { 
         // opcode 5
         // set <a> to 1 if <b> is greater than <c>; set it to 0 otherwise
         mnemonic: "gt",
         size: 4,
+        impl: (r: Runtime, tokens: number[]) => {
+            const aIdx = resolveRegisterIdx(r, tokens, 0)
+            const b = resolveArg(r, tokens, 1)
+            const c = resolveArg(r, tokens, 2)
+            r.registers[aIdx] = (b > c) ? 1 : 0
+            r.pc = r.pc = 4
+        }
     },
     { 
         // opcode 6

@@ -121,6 +121,56 @@ describe('testing interpreter output', () => {
 
     expect(world.runtime.registers[reg0idx]).toBe(5)
   });
+  test('opEq sets reg0 to 1 if args are equal', () => {
+    let world = new World()
+    const tokens = [
+        opEq, reg0, 15, 15,
+        opHalt,
+    ]
+    interpret(world.runtime, tokens)
+
+    expect(world.runtime.registers[reg0idx]).toBe(1)
+  });
+  test('opEq sets reg0 to 0 if args are not equal', () => {
+    let world = new World()
+    const tokens = [
+        opEq, reg0, 15, 25,
+        opHalt,
+    ]
+    interpret(world.runtime, tokens)
+
+    expect(world.runtime.registers[reg0idx]).toBe(0)
+  });
+  test('opGt sets reg0 to 1 if arg1 is larger than arg2', () => {
+    let world = new World()
+    const tokens = [
+        opGt, reg0, 20, 10,
+        opHalt,
+    ]
+    interpret(world.runtime, tokens)
+
+    expect(world.runtime.registers[reg0idx]).toBe(1)
+  });
+  test('opGt sets reg0 to 0 if arg1 is equal to arg2', () => {
+    let world = new World()
+    const tokens = [
+        opGt, reg0, 15, 15,
+        opHalt,
+    ]
+    interpret(world.runtime, tokens)
+
+    expect(world.runtime.registers[reg0idx]).toBe(0)
+  });
+  test('opGt sets reg0 to 0 if arg1 is lesser than arg2', () => {
+    let world = new World()
+    const tokens = [
+        opGt, reg0, 15, 25,
+        opHalt,
+    ]
+    interpret(world.runtime, tokens)
+
+    expect(world.runtime.registers[reg0idx]).toBe(0)
+  });
   test('opOut flushes literals when newline is encountered', () => {
     let world = new World()
     const tokens = [
