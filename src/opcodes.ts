@@ -221,7 +221,7 @@ export let opcodes: Opcode[] = [
         impl: (r: Runtime, tokens: number[]) => {
             const a = resolveArg(r, tokens, 0)
             const b = resolveArg(r, tokens, 1)
-
+            
             r.memory[a] = b
             r.pc = r.pc + 3
         }
