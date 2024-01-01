@@ -44,6 +44,40 @@ const reg6idx = 6
 const reg7idx = 7
 
 describe('testing interpreter output', () => {
+  test('opCall jumps to target offset', () => {
+    let world = new World()
+    const tokens = [
+        opCall, 3,       // 0: goto 3
+        opHalt,          // 2: halt
+        opSet, reg0, 10, // 3: reg0 = 10 
+        opHalt,          // 6: halt
+    ]
+    interpret(world.runtime, tokens)
+
+    expect(world.runtime.registers[reg0idx]).toBe(10)
+  });
+  test('opRet returns to call site after opCall', () => {
+    let world = new World()
+    const tokens = [
+        opCall, 6,       // 0: goto 6
+        opSet, reg1, 20, // 2: reg1 = 20
+        opHalt,          // 5: halt
+        opSet, reg0, 10, // 6: reg0 = 10 
+        opRet,           // 9: return (to 2)
+        opHalt,          // 10: halt
+    ]
+    interpret(world.runtime, tokens)
+
+    expect(world.runtime.registers[reg0idx]).toBe(10)
+    expect(world.runtime.registers[reg1idx]).toBe(20)
+  });
+  test('opRet halts if the stack is empty', () => {
+    let world = new World()
+    const tokens = [
+        opRet
+    ]
+    interpret(world.runtime, tokens)
+  });
   test('opSet sets value for register 0', () => {
     let world = new World()
     const tokens = [

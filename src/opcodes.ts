@@ -203,12 +203,25 @@ export let opcodes: Opcode[] = [
         // write the address of the next instruction to the stack and jump to <a>
         mnemonic: "call",
         size: 2,
+        impl: (r: Runtime, tokens: number[]) => {
+            const a = resolveArg(r, tokens, 0)
+            r.stack.push(r.pc + 2)
+            r.pc = a
+        }
     },
     { 
         // opcode 18
         // remove the top element from the stack and jump to it; empty stack = halt
         mnemonic: "ret",
         size: 1,
+        impl: (r: Runtime, tokens: number[]) => {
+            const value = r.stack.pop()
+            if (value == undefined) {
+                r.running = false
+                return
+            }
+            r.pc = value
+        }
     },
     { 
         // opcode 19

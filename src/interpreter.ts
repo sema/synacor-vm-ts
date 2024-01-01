@@ -23,5 +23,4 @@ export function interpret(runtime: Runtime, tokens: number[], trace?: boolean) {
 
         opcode.impl(runtime, tokens)
     }
-
 }
