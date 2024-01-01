@@ -18,7 +18,7 @@ export function interpret(runtime: Runtime, tokens: number[], trace?: boolean) {
         }
 
         if (trace) {
-            console.log(formatInstruction(runtime.pc, tokens))
+            console.log(formatInstruction(runtime.pc, tokens, runtime))
         }
 
         opcode.impl(runtime, tokens)

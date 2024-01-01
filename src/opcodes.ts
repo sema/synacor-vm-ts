@@ -209,10 +209,10 @@ function resolveArg(runtime: Runtime, tokens: number[], argument: number): numbe
     const offset = runtime.pc + argument + 1
     const token = tokens[offset]
 
-    if (token < 32768) { // literal
+    if (token < registerOffset) { // literal
         return token
-    } else if (token < 32776) { // register
-        const register = token - 32768
+    } else if (token < (registerOffset + 8)) { // register
+        const register = token - registerOffset
         return runtime.registers[register]
     }
 
